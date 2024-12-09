@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 day name"
+    exit 1
+fi
+
+dayName=$1
+inputFile="input_files/$dayName.txt"
+solutionFile="solutions/$dayName.py"
+
+touch $inputFile
+touch $solutionFile
+
+cat <<EOF > "$solutionFile"
+from input import read_input_file, InputFile
+
+def ${dayName}_part_1():
+    inp: InputFile = read_input_file("inputs/day_$dayName.txt")
+
+
+def ${dayName}_part_2():
+    inp: InputFile = read_input_file("inputs/day_$dayName.txt")
+EOF
