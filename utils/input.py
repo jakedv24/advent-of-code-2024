@@ -5,6 +5,9 @@ class InputFile:
     def __init__(self, file_name: str, lines: list[str]):
         self.file_name = file_name
         self.lines = lines
+    
+    def graph(self) -> list[list[str]]:
+        return [list(s.replace("\n", "")) for s in self.lines]
 
 
 def read_input_file(file_name: str) -> InputFile:
