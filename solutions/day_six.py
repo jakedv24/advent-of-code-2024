@@ -1,8 +1,8 @@
 import copy
 import pprint
 
-from input import read_input_file, InputFile
-from graphs import point_in_bounds, add_tuples, find_element
+from utils.input import read_input_file, InputFile
+from utils.graphs import point_in_bounds, add_tuples, find_element
 
 dirs = [
     (-1, 0),

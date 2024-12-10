@@ -1,11 +1,12 @@
-from input import InputFile, read_input_file
-from graphs import point_in_bounds, add_tuples, negate_tuple
+from utils.input import InputFile, read_input_file
+from utils.graphs import point_in_bounds, add_tuples, negate_tuple
 
 keyword = "XMAS"
 
 def day4part1():
     inp = read_input_file("input_files/day_four.txt")
-    lines = inp.lines
+    graph = inp.lines
+    lines = list(map(lambda s: list(s), graph))
     
     sum = 0
     for x, line in enumerate(lines):
@@ -17,7 +18,8 @@ def day4part1():
 
 def day4part2():
     inp = read_input_file("input_files/day_four.txt")
-    lines = inp.lines
+    graph = inp.lines
+    lines = list(map(lambda s: list(s), graph))
     
     sum = 0
     for x, line in enumerate(lines):
@@ -39,7 +41,7 @@ def day4part2():
 
 
 # check if a keyword starts at this point
-def check_keyword(keyword: str, x: int, y: int, lines: list[str]) -> int:
+def check_keyword(keyword: str, x: int, y: int, lines: list[list[str]]) -> int:
     # check first char is indeed the starting char
     if lines[x][y] != keyword[0]:
         return False
@@ -59,7 +61,7 @@ def check_keyword(keyword: str, x: int, y: int, lines: list[str]) -> int:
 
 
 # follows a certain direction until boundary or complete word is found, breaks out otherwise
-def check_direction(keyword: str, startX: int, startY: int, dir: tuple[int, int], graph: list[str]) -> bool:
+def check_direction(keyword: str, startX: int, startY: int, dir: tuple[int, int], graph: list[list[str]]) -> bool:
     point: tuple[int, int] = (startX, startY)
     for c in keyword:
         if not point_in_bounds(point, graph) or c != graph[point[0]][point[1]]:

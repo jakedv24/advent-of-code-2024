@@ -1,4 +1,4 @@
-from input import read_input_file, InputFile
+from utils.input import read_input_file, InputFile
 import re
 
 def day_three_part_one() -> int :
