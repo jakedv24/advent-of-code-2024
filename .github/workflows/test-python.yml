@@ -30,7 +30,7 @@ jobs:
       # Step 4: Build and run tests with Docker Compose
       - name: Build and Run Tests with Docker Compose
         run: |
-          docker-compose -f docker-compose.yml up --build --abort-on-container-exit --exit-code-from python bin/test
+          docker compose run --rm python bin/test
 
       # Step 5: Clean up containers (optional)
       - name: Clean up
