@@ -1,5 +1,5 @@
 from input import InputFile, read_input_file
-from graphs import point_in_bounds
+from graphs import point_in_bounds, add_tuples, negate_tuple
 
 keyword = "XMAS"
 
@@ -69,10 +69,3 @@ def check_direction(keyword: str, startX: int, startY: int, dir: tuple[int, int]
         point = add_tuples(point, dir)
     
     return True
-
-
-def add_tuples(one: tuple, two: tuple) -> tuple:
-    return tuple(map(lambda i, j: i + j, one, two))
-
-def negate_tuple(tup: tuple) -> tuple:
-    return tuple(-x for x in tup)

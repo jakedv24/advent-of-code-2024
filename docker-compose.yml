@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  python:
+    build:
+      context: .
+      target: python
+    container_name: python
+    volumes:
+      - .:/app # Mount the local directory
+    working_dir: /app

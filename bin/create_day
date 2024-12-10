@@ -16,9 +16,9 @@ cat <<EOF > "$solutionFile"
 from input import read_input_file, InputFile
 
 def ${dayName}_part_1():
-    inp: InputFile = read_input_file("inputs/day_$dayName.txt")
+    inp: InputFile = read_input_file("input_files/$dayName.txt")
 
 
 def ${dayName}_part_2():
-    inp: InputFile = read_input_file("inputs/day_$dayName.txt")
+    inp: InputFile = read_input_file("input_files/$dayName.txt")
 EOF
