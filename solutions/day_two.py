@@ -1,4 +1,4 @@
-from input import read_input_file, InputFile
+from utils.input import read_input_file, InputFile
 
 def day_two_part_one() -> int :
     inp: InputFile = read_input_file("input_files/day_two.txt")

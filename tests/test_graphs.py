@@ -1,4 +1,4 @@
-import graphs
+import utils.graphs as graphs
 
 def test_point_in_bounds():
     graph = [
