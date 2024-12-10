@@ -37,7 +37,7 @@ def test_day_seven_target_possible_or():
     assert target_is_possible(eq, True) == True
     
     eq = Equation("83: 17 5")
-    assert target_is_possible(eq, True) == True
+    assert target_is_possible(eq, True) == False
     
 
 
