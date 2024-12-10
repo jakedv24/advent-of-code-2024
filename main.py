@@ -1,7 +1,7 @@
-from solutions.day_six import day_six_part_2
+from solutions.day_seven import day_seven_part_1
 
 def main():
-    ans = day_six_part_2()
+    ans = day_seven_part_1()
 
 # runs the main handler
 if __name__ == "__main__":
