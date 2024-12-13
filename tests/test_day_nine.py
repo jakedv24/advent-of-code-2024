@@ -1,4 +1,4 @@
-from solutions.day_nine import construct_disk_from_map, checksum
+from solutions.day_nine import construct_disk_from_map, checksum, construct_disk_from_map_pt_2
 
 
 def test_compute_checksum():
@@ -8,3 +8,7 @@ def test_compute_checksum():
 
 def test_sequence():
     assert construct_disk_from_map("12345") == [0, 2, 2, 1, 1, 1, 2, 2, 2]
+
+def test_sequence_part_2():
+    assert construct_disk_from_map_pt_2("12345") == [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2]
+    assert construct_disk_from_map_pt_2("12342") == [2, 2, 0, 1, 1, 1]
