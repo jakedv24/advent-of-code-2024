@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from copy import deepcopy
 from itertools import chain
 from utils.input import read_input_file, InputFile
@@ -53,7 +54,7 @@ def construct_disk_from_map(disk_map: str) -> list[int]:
     
     return disk
 
-class File:
+class Slot:
     file_id: int
     size: int
     
@@ -63,68 +64,85 @@ class File:
     
     def __str__(self):
         s = ""
-        for i in range(0, self.size):
-            s += str(self.file_id)
+        for _ in range(0, self.size):
+            s += str(self.file_id) if self.is_file() else "."
         return s
 
     def __repr__(self):
         return self.__str__()
+    
+    def __eq__(self, other):
+        return self.file_id == other.file_id and self.size == other.size and self.is_file() == other.is_file()
+    
+    def __hash__(self):
+        # Hash based on the x and y values
+        return hash((self.file_id, self.size, self.is_file()))
 
+    @abstractmethod
+    def is_file(self) -> bool: pass
 
-def construct_disk_from_map_pt_2(disk_map: str) -> list[int]:
+class File(Slot):
+    def is_file(self): return True
+
+class Space(Slot):
+    def is_file(self): return False
+
+def construct_disk_from_map_pt_2(disk_map: str) -> list[str]:
     slots = list(disk_map)
     files: list[File] = []
-    spaces: list[int] = []
     
-    # Step 1: Parse the disk_map and categorize into files and spaces
+    disk_objs: list[Slot] = [] 
     for i, slot in enumerate(slots):
-        if i % 2 == 0:  # Even index is a file
-            files.append(File(file_id=(i // 2), size=int(slot)))
-        else:  # Odd index is a space
-            spaces.append(int(slot))
-    
-    # Step 2: Process files in reverse order (largest file ID first)
-    resulting_files = deepcopy(files)
-    for i, file in enumerate(reversed(files)):
-        print(f"Checking file {file.file_id}, size {file.size}")
+        if int(slot) == 0:
+            continue
         
-        # Step 3: Find the left-most space strictly to the left of the current file
-        space_with_room = -1
-        for j in range(file.file_id):  # Only check spaces strictly to the left
-            if spaces[j] >= file.size:  # Space can fit the file
-                space_with_room = j
-                break
-        
-        print(f"Space found? {space_with_room}")
-        
-        # Step 4: If a valid space is found, move the file
-        if space_with_room != -1:
-            print(f"Before move spaces: {spaces}, files: {resulting_files}")
-            
-            # Update the space by reducing the available space
-            spaces[space_with_room] -= file.size  # Reduce the space by file size
-            
-            # Insert a zero to simulate the "compaction"
-            spaces.insert(space_with_room, 0)
-            
-            # Move the file to the found space position
-            file_index = len(files) - i - 1  # Reverse index to access the original files
-            to_move = resulting_files.pop(file_index)
-            resulting_files.insert(space_with_room, to_move)
-            
-            print(f"Moving file {to_move.file_id} to space {space_with_room}")
-            print(f"After move spaces: {spaces}, files: {resulting_files}")
-    
-    # Step 5: Rebuild the disk from the resulting files and spaces
-    disk: list[int] = []
-    for i in range(len(slots)):
         if i % 2 == 0:
-            file = resulting_files[i // 2]
-            for j in range(file.size):
-                disk.append(file.file_id)
-        else:
-            for j in range(spaces[i // 2]):
-                disk.append(0)
+            f = File(file_id=(i // 2), size=int(slot))# Even index is a file
+            files.append(f)
+            disk_objs.append(f)
+        else:  # Odd index is a space
+            s = Space(file_id=(i // 2), size=int(slot))# Even index is a file
+            disk_objs.append(s)
     
-    print(f"Final disk: {disk}")
-    return disk
+    # go backwards through all files
+    for file in reversed(files):
+        curr_index = disk_objs.index(file)
+        
+        # find slot up to this disk that can fit
+        for slotI in range(0, curr_index):
+            possible_space = disk_objs[slotI]
+            if not possible_space.is_file() and possible_space.size >= file.size:
+                possible_space.size -= file.size
+                f = disk_objs.pop(curr_index)
+                disk_objs.insert(slotI, f)
+                
+                # replace empty slot before with a prev file size
+                if not disk_objs[curr_index].is_file():
+                    disk_objs[curr_index].size += file.size
+                else:
+                    disk_objs.insert(curr_index + 1, Space(file_id=0, size=file.size))
+                break
+    
+    resulting = "".join(str(item) for item in disk_objs)
+    return list(resulting)
+
+# credit: https://topaz.github.io/paste/#XQAAAQDqAQAAAAAAAAAxmwhIY/U//lM4LizwsCZHhiQtGTo9waX+C6ruax1N4ADYfrCEjk9rZmg5ArFObtBj1FbcHUZdJ0p4QPwS1Fc+sAZbfjzrtNe4X4W+GiJzgAx3YTsFi0en1x15bq6eX8Fg9COgvgLdnjltWrokM1yqg0TU4g5OCchD4wS5SGrKJtbPj3w7+twAINEtvzb/rtq3hQAW95ZLtaaaUsX0so2WK/lFJTZEjjlJt+jD9nrk4Pq4E5GudPAsncCjzTjefTP2RiNSPLZBP4PCe604A33MBZeI+Rr6ECyPsGN1I3pZOKAGsPEG2z6NLXn8esAY9sh8g4r9CDoMCRtQDLkR3z1mlLziGD1A/rM///JJpxs=
+class Mem():
+    def __init__(b, pos, len): b.pos = pos; b.len = len
+    def val(b): return (2*b.pos + b.len-1) * b.len // 2
+
+def disk_help():
+    pos, mem = 0, []
+    for len in map(int, read_input_file("input_files/day_nine.txt").raw()):
+        mem += [Mem(pos, len)]
+        pos += len
+
+    for used in mem[::-2]:
+        for free in mem[1::2]:
+            if (free.pos <= used.pos
+            and free.len >= used.len):
+                used.pos  = free.pos
+                free.pos += used.len
+                free.len -= used.len
+
+    print(sum(id*m.val() for id, m in enumerate(mem[::2])))

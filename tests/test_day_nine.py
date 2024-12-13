@@ -10,5 +10,9 @@ def test_sequence():
     assert construct_disk_from_map("12345") == [0, 2, 2, 1, 1, 1, 2, 2, 2]
 
 def test_sequence_part_2():
-    assert construct_disk_from_map_pt_2("12345") == [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2]
-    assert construct_disk_from_map_pt_2("12342") == [2, 2, 0, 1, 1, 1]
+    assert checksum(construct_disk_from_map_pt_2("2333133121414131402")) == 2858
+    assert checksum(construct_disk_from_map_pt_2("122")) == 3
+    assert checksum(construct_disk_from_map_pt_2("1242")) == 18
+    assert checksum(construct_disk_from_map_pt_2("4000")) == 0
+    assert checksum(construct_disk_from_map_pt_2("4010")) == 4
+    assert checksum(construct_disk_from_map_pt_2("4110")) == 4
