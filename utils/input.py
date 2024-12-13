@@ -9,6 +9,9 @@ class InputFile:
     def graph(self) -> list[list[str]]:
         return [list(s.replace("\n", "")) for s in self.lines]
 
+    def raw(self) -> str:
+        return ''.join(line.replace("\n", "") for line in self.lines)
+
 
 def read_input_file(file_name: str) -> InputFile:
     lines: list[str] = []
