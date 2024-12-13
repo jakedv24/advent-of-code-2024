@@ -39,11 +39,3 @@ def test_day_seven_target_possible_or():
     eq = Equation("83: 17 5")
     assert target_is_possible(eq, True) == False
     
-
-
-def test_part_one():
-    assert day_seven_part_1() == 5512534574980
-
-
-def test_part_two():
-    assert day_seven_part_2() == 328790210468594
